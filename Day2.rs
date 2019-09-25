@@ -256,8 +256,7 @@ auxwobzrvqvpsjfgklthnyioqe";
     let count_occurrences = |s: String, i: i32| {
         s.chars()
             .fold(HashMap::new(), |mut m, x| {
-                let v = m.entry(x).or_insert(0);
-                *v += 1;
+                m.entry(x).and_modify(|v| *v+=1).or_insert(1);
                 m
             })
             .iter()
