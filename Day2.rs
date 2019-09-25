@@ -1,4 +1,5 @@
-use std::collections::HashMap;
+use itertools::iproduct;
+use std::collections::HashMap; // 0.8.0
 
 fn main() {
     let input = "auxwcbzrmdvpsjfgkrthnkioqm
@@ -256,7 +257,7 @@ auxwobzrvqvpsjfgklthnyioqe";
     let count_occurrences = |s: String, i: i32| {
         s.chars()
             .fold(HashMap::new(), |mut m, x| {
-                m.entry(x).and_modify(|v| *v+=1).or_insert(1);
+                m.entry(x).and_modify(|v| *v += 1).or_insert(1);
                 m
             })
             .iter()
@@ -264,12 +265,27 @@ auxwobzrvqvpsjfgklthnyioqe";
     };
 
     println!(
-        "{:?}",
+        "Part1: {}",
         s.iter()
             .filter(|x| count_occurrences(x.to_string(), 2))
             .count()
             * s.iter()
                 .filter(|x| count_occurrences(x.to_string(), 3))
                 .count()
+    );
+
+    let diff = |a: String, b: String| a.chars().zip(b.chars()).filter(|&(a, b)| a != b).count();
+    let common = |(a, b): (&String, &String)| -> String {
+        a.chars()
+            .zip(b.chars())
+            .filter(|&(a, b)| a == b)
+            .fold(String::new(), |mut acc, b| { acc.push(b.0); acc})
+    };
+
+    let mut b = iproduct!(&s, &s);
+    println!(
+        "{:?}",
+        common(b.find(|(i, j)| diff(i.to_string(), j.to_string()) == 1)
+            .unwrap())
     );
 }
