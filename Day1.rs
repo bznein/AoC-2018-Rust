@@ -1,6 +1,7 @@
 
 fn main() 
-{let input = "+12
+{
+  let input = "+12
 -13
 +17
 +17
@@ -1012,8 +1013,8 @@ fn main()
 +18
 +73808";
 
-let sum : i32 =input.split_whitespace().map(|ss| ss.parse().unwrap()).collect::<Vec<i32>>().iter().sum();
-print!("{}", sum)
+let s  : i32=input.split_whitespace().map(|ss| ss.parse::<i32>().unwrap()).sum();
+print!("{}", s)
 
 
 }
