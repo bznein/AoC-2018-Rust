@@ -254,7 +254,7 @@ auxwcbzrmdvpsrfgklpinyioqe
 auxwobzrvqvpsjfgklthnyioqe";
 
     let s : Vec<String> =input.split_whitespace().map(String::from).collect();
-    let count_occurrences = |s:String, i:i32| {let m= HashMap::new(); s.chars().fold(m, |mut m,x| {m.insert(x,1).and_then(|v| m.insert(x,v+1)); m}).iter().any(|(_,b)|b==&i)};
+    let count_occurrences = |s:String, i:i32| s.chars().fold(HashMap::new(), |mut m,x| {m.insert(x,1).and_then(|v| m.insert(x,v+1)); m}).iter().any(|(_,b)|b==&i);
     
     println!("{:?}", s.iter().filter(|x| count_occurrences(x.to_string(),2)).count()* s.iter().filter(|x| count_occurrences(x.to_string(),3)).count());
 
