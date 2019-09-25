@@ -1,3 +1,5 @@
+use std::collections::HashSet;
+use std::process;
 
 fn main() 
 {let input = "+12
@@ -1012,18 +1014,28 @@ fn main()
 +18
 +73808";
 
-
-let s  =input.split_whitespace().try_fold(0i32, |acc,y|  y.parse::<i32>().and_then(|i| Ok(acc +i)));
-match s
-{
-    Ok(v) => println!("Part 1: {}", v),
-    Err(e) => println!("Error: {}", e),
-}
-
-
-//let i  =input.split_whitespace().map(|ss| ss.parse::<i32>().unwrap());
-
-//print!("Part 2: {:?}", i);
+    
+    let s  =input.split_whitespace().try_fold(0i32, |acc,y|  y.parse::<i32>().and_then(|i| Ok(acc +i)));
+    match s
+    {
+        Ok(v) => println!("Part 1: {}", v),
+        Err(e) => println!("Error: {}", e),
+    }
+    
+    let v: Vec<i32> = input.split_whitespace().filter_map(|w| w.parse().ok()).collect();
+    
+    
+    let mut m = HashSet::new();
+    let mut acc =0;
+    for num in v.iter().cycle()
+    {
+        acc += num;
+        if !m.insert(acc)
+        {
+            println!("Part 2: {:?}", acc);
+            process::exit(1);
+        }
+    }
 
 
 }
