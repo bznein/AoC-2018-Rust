@@ -1,7 +1,6 @@
 
 fn main() 
-{
-  let input = "+12
+{let input = "+12
 -13
 +17
 +17
@@ -1013,8 +1012,18 @@ fn main()
 +18
 +73808";
 
-let s  : i32=input.split_whitespace().map(|ss| ss.parse::<i32>().unwrap()).sum();
-print!("{}", s)
+
+let s  =input.split_whitespace().try_fold(0i32, |acc,y|  y.parse::<i32>().and_then(|i| Ok(acc +i)));
+match s
+{
+    Ok(v) => println!("Part 1: {}", v),
+    Err(e) => println!("Error: {}", e),
+}
+
+
+//let i  =input.split_whitespace().map(|ss| ss.parse::<i32>().unwrap());
+
+//print!("Part 2: {:?}", i);
 
 
 }
