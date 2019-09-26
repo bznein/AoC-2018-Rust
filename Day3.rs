@@ -1,12 +1,20 @@
 use std::collections::HashMap;
-
+use std::collections::HashSet;
 fn fill(
-    m: &mut HashMap<(i32, i32), i32>,
-    (top_left_x, top_left_y, width, heigth): (i32, i32, i32, i32),
+    m: &mut HashMap<(i32, i32), (i32, i32)>,
+    (idx, top_left_x, top_left_y, width, heigth): (i32, i32, i32, i32, i32),
+    nc: &mut HashSet<i32>,
 ) {
     for j in top_left_x..top_left_x + width {
         for i in top_left_y..top_left_y + heigth {
-            m.entry((i, j)).and_modify(|v| *v += 1).or_insert(1);
+            let vv = m
+                .entry((i, j))
+                .and_modify(|(_, v)| *v += 1)
+                .or_insert((idx, 1));
+            if vv.1 > 1 {
+                nc.remove(&idx);
+                nc.remove(&vv.0);
+            }
         }
     }
 }
@@ -1369,11 +1377,16 @@ fn main() {
             .filter_map(|x| x.parse().ok())
             .collect()
     };
+    let mut not_conflicting = HashSet::new();
     let mut m = HashMap::new();
     let s_to_map =
-        |s: &Vec<i32>, m: &mut HashMap<(i32, i32), i32>| fill(m, (s[1], s[2], s[3], s[4]));
+        |s: &Vec<i32>, m: &mut HashMap<(i32, i32), (i32, i32)>, nc: &mut HashSet<i32>| {
+            nc.insert(s[0]);
+            fill(m, (s[0], s[1], s[2], s[3], s[4]), nc);
+        };
     for x in s {
-        s_to_map(&(my_split(x.to_string())), &mut m);
+        s_to_map(&(my_split(x.to_string())), &mut m, &mut not_conflicting);
     }
-    println!("{:?}", &m.iter().filter(|(_, v)| **v > 1).count());
+    println!("Part1: {:?}", &m.iter().filter(|(_, (_, v))| *v > 1).count());
+    println!("Part2: {:?}", not_conflicting);
 }
