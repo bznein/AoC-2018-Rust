@@ -1,13 +1,12 @@
 use std::collections::HashMap;
 
-
-fn fill (m: & mut HashMap<(i32,i32),i32>, (x,y,w,h,) : (i32,i32,i32,i32))
-{
-    for j in x..x+w
-    {
-        for i in y..y+h
-        {
-            m.entry((i,j)).and_modify(|v| *v += 1).or_insert(1);
+fn fill(
+    m: &mut HashMap<(i32, i32), i32>,
+    (top_left_x, top_left_y, width, heigth): (i32, i32, i32, i32),
+) {
+    for j in top_left_x..top_left_x + width {
+        for i in top_left_y..top_left_y + heigth {
+            m.entry((i, j)).and_modify(|v| *v += 1).or_insert(1);
         }
     }
 }
@@ -1364,12 +1363,17 @@ fn main() {
 #1349 @ 724,871: 21x26";
 
     let s: Vec<String> = input.split('\n').map(String::from).collect();
-    let my_split = |s:String| s.split(|c| c == '#' || c == ' ' ||  c =='@' || c == ':' || c== ',' || c == 'x').filter(|x| !x.is_empty()).filter_map(|x| x.parse().ok()).collect();
+    let my_split = |s: String| {
+        s.split(|c| c == '#' || c == ' ' || c == '@' || c == ':' || c == ',' || c == 'x')
+            .filter(|x| !x.is_empty())
+            .filter_map(|x| x.parse().ok())
+            .collect()
+    };
     let mut m = HashMap::new();
-    let s_to_map = |s :&Vec<i32>, m: & mut HashMap<(i32,i32),i32>| fill(m,(s[1],s[2],s[3],s[4]));
-    for x in s
-    {
-        s_to_map(&(my_split(x.to_string())), & mut m);
+    let s_to_map =
+        |s: &Vec<i32>, m: &mut HashMap<(i32, i32), i32>| fill(m, (s[1], s[2], s[3], s[4]));
+    for x in s {
+        s_to_map(&(my_split(x.to_string())), &mut m);
     }
-    println!("{:?}", &m.iter().filter(|(_,v)| *v>&1).count());
+    println!("{:?}", &m.iter().filter(|(_, v)| **v > 1).count());
 }
