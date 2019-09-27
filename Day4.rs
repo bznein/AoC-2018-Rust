@@ -1091,9 +1091,9 @@ fn main() {
         }
     }
     let max_k = m.iter().max_by_key(|(_,&v)| v).unwrap().0;
-    let s  =times_asleep.iter().filter(|((k1,k2),v)| k1 == max_k).map(|((k1,k2),v)| (k2,v)).max_by_key(|(_,&v)| v).unwrap().0;
+    let s  =times_asleep.iter().filter(|((k1,_),_)| k1 == max_k).map(|((_,k2),v)| (k2,v)).max_by_key(|(_,&v)| v).unwrap().0;
     println!("Part 1: {}", s*max_k);
     let s2  =times_asleep.iter().max_by_key(|((_,_),&v)| v).unwrap();
-    println!("Part2: {}",(s2.0).0*(s2.0).1);
+    println!("Part 2: {}",(s2.0).0*(s2.0).1);
 
 }
